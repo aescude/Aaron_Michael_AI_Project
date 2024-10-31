@@ -1,4 +1,7 @@
 
+#copy this into the terminal to run  code
+#    python3 'Tic Tac Toe AI - Python.py'
+
 # (c) 2024 Roland Labana
 
 import random
