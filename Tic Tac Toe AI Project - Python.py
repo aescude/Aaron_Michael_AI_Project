@@ -138,7 +138,7 @@ class AaronMikeAI:
         #check if we have winning move
         for i in range(9):
             if game.is_valid_move(i):
-                game.board[i] = 'X'  # Assuming this AI plays 'X'
+                game.board[i] = 'O'  # Assuming this AI plays 'O'
                 if game.check_win(game.board):
                     game.board[i] = ' '  # Reset for actual move
                     return i
@@ -147,7 +147,7 @@ class AaronMikeAI:
         #check if enemy has winning move
         for i in range(9):
             if game.is_valid_move(i):
-                game.board[i] = 'O'  # Check if opponent ('O') could win
+                game.board[i] = 'X'  # Check if opponent ('X') could win
                 if game.check_win(game.board):
                     game.board[i] = ' '  # Reset for actual move
                     return i
