@@ -144,7 +144,7 @@ class AaronAI:
 class AaronMikeAI:
     def determine_move(self, game):
         possibleMoves = []
-        #add all open spaces into a list to then randomly choose one
+        #add all open spaces into a list called possibleMoves
         for i in range(9):
             if game.is_valid_move(i):
                 possibleMoves.append(i)
@@ -167,13 +167,17 @@ class AaronMikeAI:
                     return i
                 game.board[i] = ' '  # Reset for next check
 
+        #placing in the middle as first choice if no winning or blocking moves are available
         if 4 in possibleMoves:
             return 4
-        
+
+        #placing in the corners if no middle or winning or blocking moves are available
+        #goes through list of corners, checks if any are available moves, and then places first available corner
         for corneroption in [0, 2, 6, 8]:
             if corneroption in possibleMoves:
                 return corneroption
-            
+
+        #if no corners or middle or winning or blocking moves are available place in a random available space
         return random.choice(possibleMoves)
 
 if __name__ == "__main__":
