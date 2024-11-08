@@ -141,6 +141,41 @@ class AaronAI:
             pickedmove = random.choice(possibleMoves)
         return pickedmove
 
+class AaronMikeAI:
+    def determine_move(self, game):
+        possibleMoves = []
+        #add all open spaces into a list to then randomly choose one
+        for i in range(9):
+            if game.is_valid_move(i):
+                possibleMoves.append(i)
+        
+        #check if we have winning move
+        for i in range(9):
+            if game.is_valid_move(i):
+                game.board[i] = 'O'  # Assuming this AI plays 'O'
+                if game.check_win(game.board):
+                    game.board[i] = ' '  # Reset for actual move
+                    return i
+                game.board[i] = ' '  # Reset for next check
+
+        #check if enemy has winning move
+        for i in range(9):
+            if game.is_valid_move(i):
+                game.board[i] = 'X'  # Check if opponent ('X') could win
+                if game.check_win(game.board):
+                    game.board[i] = ' '  # Reset for actual move
+                    return i
+                game.board[i] = ' '  # Reset for next check
+
+        if 4 in possibleMoves:
+            return 4
+        
+        for corneroption in [0, 2, 6, 8]:
+            if corneroption in possibleMoves:
+                return corneroption
+            
+        return random.choice(possibleMoves)
+
 if __name__ == "__main__":
     # Here you can decide how to initialize players
     # For example, to test with one human and one AI:
