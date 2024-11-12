@@ -188,13 +188,13 @@ class MinimaxNode:
         return self.check_win('X') or self.check_win('O') or ' ' not in self.board
 
     # Rewriting check win function since we arent working with game class in this area, also so that we can actually get which symbol won
-    def check_win(self, symbol):
+    def check_win(self, board):
         win_conditions = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
             [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
             [0, 4, 8], [2, 4, 6]  # Diagonals
         ]
-        return any(self.board[i] == self.board[j] == self.board[k] == symbol for i, j, k in win_conditions)
+        return any(all(board[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
 
     def generate_children(self):
         # If in terminal state, no children needed
