@@ -174,16 +174,20 @@ class AaronMikeAI:
         # If no corners or middle or winning or blocking moves are available, place in a random available space
         return random.choice(possibleMoves)
 
+#class for the node used in the minimax
 class MinimaxNode:
+    # Creating the node template with board info, which player it is (X or O), its value once it gets given one, and its children if it has any
     def __init__(self, board, player):
-        self.board = board[:]
-        self.player = player
-        self.value = None
-        self.children = []
+        self.board = board[:] # Make a copy of the board to avoid modifying the original
+        self.player = player # Store the current player
+        self.value = None # Value to store the result of the minimax evaluation (initialized as None)
+        self.children = [] # List to store child nodes (next possible game states)
 
+    # Checking if the board is in a terminal state (X or O has won, or all spaces filled)
     def is_terminal(self):
         return self.check_win('X') or self.check_win('O') or ' ' not in self.board
 
+    # Rewriting check win function since we arent working with game class in this area, also so that we can actually get which symbol won
     def check_win(self, symbol):
         win_conditions = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
@@ -193,28 +197,32 @@ class MinimaxNode:
         return any(self.board[i] == self.board[j] == self.board[k] == symbol for i, j, k in win_conditions)
 
     def generate_children(self):
+        # If in terminal state, no children needed
         if self.is_terminal():
             return []
         children = []
+        # Loop through board positions and generate possible moves
         for i in range(9):
-            if self.board[i] == ' ':
-                new_board = self.board[:]
-                new_board[i] = self.player
-                new_player = 'O' if self.player == 'X' else 'X'  # Switch player
+            if self.board[i] == ' ': # Only generate moves for empty spaces
+                new_board = self.board[:] # Make a copy of the current board
+                new_board[i] = self.player # Make the move for the current player
+                new_player = 'O' if self.player == 'X' else 'X'  # Switch to the opponent's turn
+                
+                # Create a new node (child) with the updated board and the opponent as the next player
                 children.append(MinimaxNode(new_board, new_player))
         return children
 
     def minimax(self):
-        """Compute the minimax value of the current node."""
+        # Setting the values once terminal state is hit
         if self.is_terminal():
             if self.check_win('X'):
                 return 1  # X wins
             elif self.check_win('O'):
                 return -1  # O wins
             else:
-                return 0  # Draw
+                return 0  # Tie
 
-        # Generate children and calculate the minimax value
+        # Generate possible children nodes
         children = self.generate_children()
         if self.player == 'X':  # Maximizing player
             return max(child.minimax() for child in children)
@@ -223,21 +231,22 @@ class MinimaxNode:
 
 class MinimaxAI:
     def determine_move(self, game):
-        """Use Minimax to find the best move."""
-        best_value = float('-inf')
-        best_move = -1
+        best_value = float('-inf') # Start with lowest value since X is maximizing
+        best_move = -1 # Store the best move
 
         for i in range(9):
-            if game.is_valid_move(i):
-                game.board[i] = 'O'  # Make the move (assuming O is the AI)
-                node = MinimaxNode(game.board, 'X')  # Now it's the opponent's turn
-                move_value = node.minimax()
-                game.board[i] = ' '  # Undo the move
+            if game.is_valid_move(i): # Check if space is empty
+                game.board[i] = 'O'  # Simulate AI O move
+                node = MinimaxNode(game.board, 'X') # Change turns
+                move_value = node.minimax() # Calculate the value of this move
+                game.board[i] = ' '  # Reset
 
+                # If this move has a better value, update the best move
                 if move_value > best_value:
-                    best_value = move_value
-                    best_move = i
+                    best_value = move_value # Update the best value found so far
+                    best_move = i # Update the best move to the current move i
 
+        # Return the board location of the best move for the AI
         return best_move
 
 if __name__ == "__main__":
