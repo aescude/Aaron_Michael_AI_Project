@@ -196,6 +196,7 @@ class MinimaxNode:
         ]
         return any(all(board[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
 
+    #function to create children of the node (possible game states)
     def generate_children(self):
         # If in terminal state, no children needed
         if self.is_terminal():
@@ -229,11 +230,13 @@ class MinimaxNode:
         else:  # Minimizing player
             return min(child.minimax() for child in children)
 
+#the actual decision-making minimax AI class
 class MinimaxAI:
     def determine_move(self, game):
         best_value = float('-inf') # Start with lowest value since X is maximizing
         best_move = -1 # Store the best move
 
+        #going through the spaces of the board/list indexes
         for i in range(9):
             if game.is_valid_move(i): # Check if space is empty
                 game.board[i] = 'O'  # Simulate AI O move
@@ -246,7 +249,7 @@ class MinimaxAI:
                     best_value = move_value # Update the best value found so far
                     best_move = i # Update the best move to the current move i
 
-        # Return the board location of the best move for the AI
+        # Return the board location of the best move for the AI (the list index)
         return best_move
 
 if __name__ == "__main__":
