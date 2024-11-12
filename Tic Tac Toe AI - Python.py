@@ -178,7 +178,7 @@ class AaronMikeAI:
 class MinimaxNode:
     # Creating the node template with board info, which player it is (X or O), its value once it gets given one, and its children if it has any
     def __init__(self, board, player):
-        self.board = board[:] # Make a copy of the board to avoid modifying the original
+        self.board = board # Set the node board at the current board
         self.player = player # Store the current player
         self.value = None # Value to store the result of the minimax evaluation (initialized as None)
         self.children = [] # List to store child nodes (next possible game states)
