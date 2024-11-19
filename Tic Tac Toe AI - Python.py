@@ -188,7 +188,7 @@ class MinimaxNode:
         return self.check_win('X') or self.check_win('O') or ' ' not in self.board
 
     # Rewriting check win function since we arent working with game class in this area, also so that we can actually get which symbol won
-    def check_win(self, board):
+    def check_win(self, board):# need to change this
         win_conditions = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
             [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
@@ -233,7 +233,7 @@ class MinimaxNode:
 #the actual decision-making minimax AI class
 class MinimaxAI:
     def determine_move(self, game):
-        best_value = float('-inf') # Start with lowest value since X is maximizing
+        best_value = -float('inf') # Start with highest value since AI O is minimizing, and anything will be better
         best_move = -1 # Store the best move
 
         #going through the spaces of the board/list indexes
@@ -247,6 +247,7 @@ class MinimaxAI:
                 # If this move has a better value, update the best move
                 if move_value > best_value:
                     best_value = move_value # Update the best value found so far
+                    print (best_move)
                     best_move = i # Update the best move to the current move i
 
         # Return the board location of the best move for the AI (the list index)
