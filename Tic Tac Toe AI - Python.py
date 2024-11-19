@@ -194,7 +194,7 @@ class MinimaxNode:
             [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
             [0, 4, 8], [2, 4, 6]  # Diagonals
         ]
-        return any(all(board[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
+        return any(all(self.board[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
 
     #function to create children of the node (possible game states)
     def generate_children(self):
