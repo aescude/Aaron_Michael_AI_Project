@@ -174,90 +174,69 @@ class AaronMikeAI:
         # If no corners or middle or winning or blocking moves are available, place in a random available space
         return random.choice(possibleMoves)
 
-#class for the node used in the minimax
-class MinimaxNode:
-    # Creating the node template with board info, which player it is (X or O), its value once it gets given one, and its children if it has any
-    def __init__(self, board, player):
-        self.board = board # Set the node board at the current board
-        self.player = player # Store the current player
-        self.value = None # Value to store the result of the minimax evaluation (initialized as None)
-        self.children = [] # List to store child nodes (next possible game states)
+class Minimax:
+    def __init__(self, symbol):
+        self.mysymbol = symbol
+        if symbol == 'O':
+            enemysymbol = 'X'
+        else:
+            enemysymbol = 'O'
+        self.enemysymbol = enemysymbol
 
-    # Checking if the board is in a terminal state (X or O has won, or all spaces filled)
-    def is_terminal(self):
-        return self.check_win('X') or self.check_win('O') or ' ' not in self.board
-
-    # Rewriting check win function since we arent working with game class in this area, also so that we can actually get which symbol won
-    def check_win(self, board): # need to change this
-        win_conditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
-            [0, 4, 8], [2, 4, 6]  # Diagonals
-        ]
-        return any(all(self.board[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
-
-    #function to create children of the node (possible game states)
-    def generate_children(self):
-        # If in terminal state, no children needed
-        if self.is_terminal():
-            return []
-        children = []
-        # Loop through board positions and generate possible moves
-        for i in range(9):
-            if self.board[i] == ' ': # Only generate moves for empty spaces
-                new_board = self.board[:] # Make a copy of the current board
-                new_board[i] = self.player # Make the move for the current player
-                new_player = 'O' if self.player == 'X' else 'X'  # Switch to the opponent's turn
-                
-                # Create a new node (child) with the updated board and the opponent as the next player
-                children.append(MinimaxNode(new_board, new_player))
-        return children
-
-    def minimax(self):
-        # Setting the values once terminal state is hit
-        if self.is_terminal():
-            if self.check_win('X'):
-                return 1  # X wins
-            elif self.check_win('O'):
-                return -1  # O wins
+    def minimax_evaluation (self, game, arewemaximizing):
+        if game.check_win(game.board) == True:
+            if arewemaximizing == False:
+                return 1
             else:
-                return 0  # Tie
+                return -1
+        elif game.is_board_full() == True:
+            return 0
+            
+        if arewemaximizing == True:
+            best_value = -float('inf')
+            for move in range(9):
+                if game.is_valid_move(move):
+                    game.board[move] = self.mysymbol
+                    valueofmove = self.minimax_evaluation(game, False)
+                    game.board[move] = ' '
+                    best_value = max(valueofmove, best_value)
+            return best_value
+        
+        else:
+            best_value = float('inf')
+            for move in range(9):
+                if game.is_valid_move(move):
+                    game.board[move] = self.enemysymbol
+                    valueofmove = self.minimax_evaluation(game, True)
+                    game.board[move] = ' '
+                    best_value = min(valueofmove, best_value)
+            return best_value
 
-        # Generate possible children nodes
-        children = self.generate_children()
-        if self.player == 'X':  # Maximizing player
-            return max(child.minimax() for child in children)
-        else:  # Minimizing player
-            return min(child.minimax() for child in children)
-
-#the actual decision-making minimax AI class
-class MinimaxAI:
     def determine_move(self, game):
-        best_value = -float('inf') # Start with highest value since AI O is minimizing, and anything will be better
-        best_move = -1 # Store the best move
+        best_value = -float('inf')
+        best_move = None # Store the current best move for AI
 
         #going through the spaces of the board/list indexes
-        for i in range(9):
-            if game.is_valid_move(i): # Check if space is empty
-                game.board[i] = 'O'  # Simulate AI O move
-                node = MinimaxNode(game.board, 'X') # Change turns
-                move_value = node.minimax() # Calculate the value of this move
-                game.board[i] = ' '  # Reset
-
+        for move in range(9):
+            if game.is_valid_move(move): # Check if space is empty
+                game.board[move] = self.mysymbol  # Simulate AI move
+                valueofmove = self.minimax_evaluation(game, False)
+                game.board[move] = ' '
+                
                 # If this move has a better value, update the best move
-                if move_value > best_value:
-                    best_value = move_value # Update the best value found so far
-                    print (best_move)
-                    best_move = i # Update the best move to the current move i
+                if valueofmove > best_value:
+                    best_value = valueofmove # Update the best value found so far
+                    best_move = move # Update the best move to the current move
 
         # Return the board location of the best move for the AI (the list index)
         return best_move
+
 
 if __name__ == "__main__":
     # Here you can decide how to initialize players
     player1 = HumanPlayer('X')
     # You can choose any AI class below:
-    player2 = AIPlayer('O', MinimaxAI())  # Minimax AI
+    player2 = AIPlayer('O', Minimax('O'))  # Minimax AI
     #player2 = AIPlayer('O', AaronMikeAI())  # AaronMike AI
     #player2 = AIPlayer('O', RandomAI())    # Random AI
     #player2 = AIPlayer('O', SimpleAI())    # Simple AI
