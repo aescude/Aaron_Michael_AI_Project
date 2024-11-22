@@ -174,7 +174,7 @@ class AaronMikeAI:
         # If no corners or middle or winning or blocking moves are available, place in a random available space
         return random.choice(possibleMoves)
 
-class Minimax:
+class AaronMikeMinimax:
     def __init__(self, symbol):
         self.mysymbol = symbol
         if symbol == 'O':
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     # Here you can decide how to initialize players
     player1 = HumanPlayer('X')
     # You can choose any AI class below:
-    player2 = AIPlayer('O', Minimax('O'))  # Minimax AI
+    player2 = AIPlayer('O', AaronMikeMinimax('O'))  # Minimax AI
     #player2 = AIPlayer('O', AaronMikeAI())  # AaronMike AI
     #player2 = AIPlayer('O', RandomAI())    # Random AI
     #player2 = AIPlayer('O', SimpleAI())    # Simple AI
