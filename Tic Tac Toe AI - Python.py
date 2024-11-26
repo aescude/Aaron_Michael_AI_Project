@@ -199,7 +199,19 @@ class AaronMikeMinimax:
             enemysymbol = 'O'
         self.enemysymbol = enemysymbol
 
-    def minimax_evaluation (self, game, arewemaximizing):
+     def depthevalfunc(self, game):
+        if (game.board[4] == self.mysymbol) and (game.board[8] == self.mysymbol or game.board[6] == self.mysymbol or game.board[0] == self.mysymbol or game.board[2] == self.mysymbol):
+            return 1
+        if (game.board[4] == self.enemysymbol) and (game.board[8] == self.enemysymbol or game.board[6] == self.enemysymbol or game.board[0] == self.enemysymbol or game.board[2] == self.enemysymbol):
+            return -1
+        else:
+            return 0
+
+
+    def minimax_evaluation (self, game, arewemaximizing, curdepth):
+        maxdepth = 10 
+        #change this number to whatever depth you want it to go to
+
         if game.check_win(game.board) == True:
             if arewemaximizing == False:
                 return 1
@@ -208,12 +220,17 @@ class AaronMikeMinimax:
         elif game.is_board_full() == True:
             return 0
             
+   if curdepth == maxdepth: #if we reach the maximum depth we're gonna to go to
+            best_value = self.depthevalfunc(game)
+            return best_value
+
+        
         if arewemaximizing == True:
             best_value = -float('inf')
             for move in range(9):
                 if game.is_valid_move(move):
                     game.board[move] = self.mysymbol
-                    valueofmove = self.minimax_evaluation(game, False)
+                    valueofmove = self.minimax_evaluation(game, False, curdepth+1)
                     game.board[move] = ' '
                     best_value = max(valueofmove, best_value)
             return best_value
@@ -223,7 +240,7 @@ class AaronMikeMinimax:
             for move in range(9):
                 if game.is_valid_move(move):
                     game.board[move] = self.enemysymbol
-                    valueofmove = self.minimax_evaluation(game, True)
+                    valueofmove = self.minimax_evaluation(game, True, curdepth+1)
                     game.board[move] = ' '
                     best_value = min(valueofmove, best_value)
             return best_value
@@ -231,12 +248,14 @@ class AaronMikeMinimax:
     def determine_move(self, game):
         best_value = -float('inf')
         best_move = None # Store the current best move for AI
+        curdepth = 0
+
 
         #going through the spaces of the board/list indexes
         for move in range(9):
             if game.is_valid_move(move): # Check if space is empty
                 game.board[move] = self.mysymbol  # Simulate AI move
-                valueofmove = self.minimax_evaluation(game, False)
+                valueofmove = self.minimax_evaluation(game, False, curdepth)
                 game.board[move] = ' '
                 
                 # If this move has a better value, update the best move
