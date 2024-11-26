@@ -17,11 +17,13 @@ class HumanPlayer(Player):
     def make_move(self, game):
         while True:
             try:
+                #this promts the player to move in the spaces 0-8
                 move = int(input(f"Enter your move for '{self.symbol}' (0-8): "))
                 if game.is_valid_move(move):
                     game.make_move(move, self.symbol)
                     break
                 else:
+                    #If not valid move, let the player pick another space
                     print("Invalid move. Try again.")
             except ValueError:
                 print("Please enter a number.")
