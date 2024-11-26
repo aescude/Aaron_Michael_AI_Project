@@ -31,15 +31,18 @@ class HumanPlayer(Player):
 class AIPlayer(Player):
     def __init__(self, symbol, strategy):
         super().__init__(symbol)
+         # The AI uses a specific strategy(this strategy) to determine its moves
         self.strategy = strategy
 
     def make_move(self, game):
         print(f"{self.symbol}'s AI is thinking...")
         move = self.strategy.determine_move(game)
+        # Check if the move is valid and make it
         if game.is_valid_move(move):
             game.make_move(move, self.symbol)
         else:
             print(f"Error: Invalid move suggested by {self.symbol}'s AI. Defaulting to random move.")
+            # If the AI wants to play an invalid move, pick a random valid move
             for i in range(9):
                 if game.is_valid_move(i):
                     game.make_move(i, self.symbol)
@@ -47,19 +50,24 @@ class AIPlayer(Player):
 
 class TicTacToe:
     def __init__(self, player1, player2):
+        # Initialize the game with a blank board and two players
         self.board = [' ' for _ in range(9)]
         self.players = [player1, player2]
 
     def play(self):
          while True:
+              # Loop through each player in the game
             for player in self.players:
                 self.display_board()
+                # Display the current state of the board
                 player.make_move(self)
                 if self.check_win(self.board):
+                    # Check if the player has won
                     self.display_board()
                     print(f"{player.symbol} wins!")
                     return
                 if self.is_board_full():
+                    #Check if the board is full
                     self.display_board()
                     print("It's a draw!")
                     return
