@@ -12,6 +12,7 @@ class Player:
     def make_move(self, game):
         raise NotImplementedError("Subclass must implement abstract method")
 
+# Defines the HumanPlayer class, this class allows the human player to make moves
 class HumanPlayer(Player):
     def make_move(self, game):
         while True:
