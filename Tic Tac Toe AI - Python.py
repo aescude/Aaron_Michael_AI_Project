@@ -199,7 +199,7 @@ class AaronMikeMinimax:
             enemysymbol = 'O'
         self.enemysymbol = enemysymbol
 
-     def depthevalfunc(self, game):
+    def depthevalfunc(self, game):
         if (game.board[4] == self.mysymbol) and (game.board[8] == self.mysymbol or game.board[6] == self.mysymbol or game.board[0] == self.mysymbol or game.board[2] == self.mysymbol):
             return 1
         if (game.board[4] == self.enemysymbol) and (game.board[8] == self.enemysymbol or game.board[6] == self.enemysymbol or game.board[0] == self.enemysymbol or game.board[2] == self.enemysymbol):
@@ -220,7 +220,7 @@ class AaronMikeMinimax:
         elif game.is_board_full() == True:
             return 0
             
-   if curdepth == maxdepth: #if we reach the maximum depth we're gonna to go to
+        if curdepth == maxdepth: #if we reach the maximum depth we're gonna to go to
             best_value = self.depthevalfunc(game)
             return best_value
 
