@@ -73,12 +73,15 @@ class TicTacToe:
                     return
 
     def is_valid_move(self, move):
+         # Check if a move is valid 
         return self.board[move] == ' ' and 0 <= move <= 8
 
     def make_move(self, move, symbol):
+        # Makes a move on the board by placing the player's symbol in the chosen spot(X or O)
         self.board[move] = symbol
 
     def check_win(self, theBoard):
+        # Define the winning conditions(Rows, Columns, and Diagnals)
         win_conditions = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
             [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
@@ -87,6 +90,7 @@ class TicTacToe:
         return any(all(theBoard[i] == symbol for i in combo) for symbol in ['X', 'O'] for combo in win_conditions)
 
     def is_board_full(self):
+        #Checks if the board is full
         return ' ' not in self.board
 
     def display_board(self):
