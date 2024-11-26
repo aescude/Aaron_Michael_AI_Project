@@ -4,6 +4,7 @@
 # (c) 2024 Roland Labana
 import random
 
+# Defines the Player class, representing both human and AI players
 class Player:
     def __init__(self, symbol):
         self.symbol = symbol
